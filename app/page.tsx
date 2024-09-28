@@ -1,7 +1,9 @@
 'use client'
 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import DiveGraph from "@/src/components/DiveGraph"
 import { DiveData, parseFile } from "@/src/parseFile"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
@@ -49,12 +51,21 @@ export default function Home() {
       <h1 className="text-4xl font-bold">Cressi Dive Visualiser</h1>
       {diveData &&
         <>
-          <h2>Dives: {diveData.ScubaDive.length}</h2>
-          <ul>
-            {diveData.ScubaDive.map(dive => (
-              <li key={dive.ID}>{dive.DiveStart}</li>
-            ))}
-          </ul>
+          <Accordion type="single" collapsible className="w-full max-w-3xl">
+            {diveData.ScubaDive.map(dive => {
+              const points = diveData.ScubaProfilePoint.filter(p => p.ID_ScubaDive === dive.ID);
+              const maxDepth = Math.max(...points.map(p => Number.parseFloat(p.Depth)));
+              return (<AccordionItem value={dive.ID} key={dive.ID}>
+                <AccordionTrigger>{dive.DiveStart}</AccordionTrigger>
+                <AccordionContent>
+                  Dive Time: {Math.round(Number.parseInt(dive.TotalElapsedSeconds) / 60)} minutes<br />
+                  Max Depth: {maxDepth}m<br />
+                  <DiveGraph diveData={diveData as any} diveID={dive.ID} />
+                </AccordionContent>
+              </AccordionItem>)
+            })}
+          </Accordion>
+
         </>
       }
       <div className="grid w-full max-w-sm items-center gap-1.5">
