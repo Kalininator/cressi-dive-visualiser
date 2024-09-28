@@ -17,9 +17,8 @@ export const description = "A linear line chart"
 
 
 const chartConfig = {
-	desktop: {
-		label: "Desktop",
-		color: "hsl(var(--chart-1))",
+	depth: {
+		label: "Depth",
 	},
 } satisfies ChartConfig
 
@@ -28,6 +27,7 @@ const DiveGraph = ({ diveData, diveID }: { diveData: DiveData, diveID: string })
 	const chartData = points.map(p => ({
 		seconds: Number.parseInt(p.ElapsedSeconds),
 		depth: Number.parseFloat(p.Depth),
+		temperature: Number.parseFloat(p.Temperature),
 	}));
 	return (
 		<Card>
@@ -62,7 +62,6 @@ const DiveGraph = ({ diveData, diveID }: { diveData: DiveData, diveID: string })
 						<Line
 							dataKey="depth"
 							type="linear"
-							stroke="var(--color-desktop)"
 							strokeWidth={2}
 							dot={false}
 						/>

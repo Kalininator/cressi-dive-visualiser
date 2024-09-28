@@ -46,7 +46,7 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="grid items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="grid items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start"></main>
       <h1 className="text-4xl font-bold">Cressi Dive Visualiser</h1>
       {diveData &&
@@ -55,11 +55,13 @@ export default function Home() {
             {diveData.ScubaDive.map(dive => {
               const points = diveData.ScubaProfilePoint.filter(p => p.ID_ScubaDive === dive.ID);
               const maxDepth = Math.max(...points.map(p => Number.parseFloat(p.Depth)));
+              const averageDepth = points.reduce((acc, p) => acc + Number.parseFloat(p.Depth), 0) / points.length;
               return (<AccordionItem value={dive.ID} key={dive.ID}>
                 <AccordionTrigger>{dive.DiveStart}</AccordionTrigger>
                 <AccordionContent>
                   Dive Time: {Math.round(Number.parseInt(dive.TotalElapsedSeconds) / 60)} minutes<br />
                   Max Depth: {maxDepth}m<br />
+                  Average Depth: {averageDepth.toFixed(1)}m<br />
                   <DiveGraph diveData={diveData} diveID={dive.ID} />
                 </AccordionContent>
               </AccordionItem>)
