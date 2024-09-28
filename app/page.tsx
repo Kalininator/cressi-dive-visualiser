@@ -60,7 +60,7 @@ export default function Home() {
                 <AccordionContent>
                   Dive Time: {Math.round(Number.parseInt(dive.TotalElapsedSeconds) / 60)} minutes<br />
                   Max Depth: {maxDepth}m<br />
-                  <DiveGraph diveData={diveData as any} diveID={dive.ID} />
+                  <DiveGraph diveData={diveData} diveID={dive.ID} />
                 </AccordionContent>
               </AccordionItem>)
             })}
