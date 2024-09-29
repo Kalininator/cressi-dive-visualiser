@@ -12,6 +12,8 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@/components/ui/chart"
+import { db } from "../db";
+import { useLiveQuery } from "dexie-react-hooks";
 
 export const description = "A linear line chart"
 
@@ -22,12 +24,12 @@ const chartConfig = {
 	},
 } satisfies ChartConfig
 
-const DiveGraph = ({ diveData, diveID }: { diveData: DiveData, diveID: string }) => {
-	const points = diveData.ScubaProfilePoint.filter(p => p.ID_ScubaDive === diveID);
-	const chartData = points.map(p => ({
-		seconds: Number.parseInt(p.ElapsedSeconds),
-		depth: Number.parseFloat(p.Depth),
-		temperature: Number.parseFloat(p.Temperature),
+const DiveGraph = ({ diveID }: { diveID: number }) => {
+	const profilePoints = useLiveQuery(() => db.scubaProfilePoints.where({ ID_ScubaDive: diveID }).toArray());
+	const chartData = (profilePoints || []).map(p => ({
+		seconds: p.ElapsedSeconds,
+		depth: p.Depth,
+		temperature: p.Temperature,
 	}));
 	return (
 		<Card>
