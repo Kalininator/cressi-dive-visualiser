@@ -25,22 +25,22 @@ const readJsonFile = (file: Blob) =>
 
 async function saveDivesToDb(diveData: DiveData) {
   await db.scubaDives.clear();
-  await Promise.all(diveData.ScubaDive.map(async dive => {
-    db.scubaDives.add({
+  await db.scubaDives.bulkAdd(diveData.ScubaDive.map(dive => {
+    return {
       ID: parseInt(dive.ID),
       ProgressiveNumber: parseInt(dive.ProgressiveNumber),
       DiveStart: dive.DiveStart,
-    })
-  }));
+    }
+  }))
   await db.scubaProfilePoints.clear();
-  await Promise.all(diveData.ScubaProfilePoint.map(async point => {
-    db.scubaProfilePoints.add({
+  await db.scubaProfilePoints.bulkAdd(diveData.ScubaProfilePoint.map(point => {
+    return {
       ID: parseInt(point.ID),
       ID_ScubaDive: parseInt(point.ID_ScubaDive),
       ElapsedSeconds: parseInt(point.ElapsedSeconds),
       Depth: parseFloat(point.Depth),
       Temperature: parseFloat(point.Temperature),
-    })
+    }
   }));
   return;
 }
