@@ -7,7 +7,6 @@ import DiveGraph from "@/src/components/DiveGraph"
 import { db } from "@/src/db"
 import { DiveData, parseFile } from "@/src/parseFile"
 import { useLiveQuery } from "dexie-react-hooks"
-import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 const readJsonFile = (file: Blob) =>
@@ -33,6 +32,7 @@ async function saveDivesToDb(diveData: DiveData) {
       DiveStart: dive.DiveStart,
     })
   }));
+  await db.scubaProfilePoints.clear();
   await Promise.all(diveData.ScubaProfilePoint.map(async point => {
     db.scubaProfilePoints.add({
       ID: parseInt(point.ID),

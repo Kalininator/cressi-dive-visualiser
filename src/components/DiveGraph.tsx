@@ -1,5 +1,4 @@
 "use client"
-import { DiveData } from "../parseFile";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
 
 import {
