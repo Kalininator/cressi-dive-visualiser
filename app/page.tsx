@@ -31,7 +31,10 @@ export default function Home() {
   const onChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const json = await readJsonFile(event.target.files[0]) as string;
-      localStorage.setItem('diveData', json);
+      const textEncoder = new TextEncoder();
+      if (textEncoder.encode(json).length < 5000000) {
+        localStorage.setItem('diveData', json);
+      }
       setDiveData(parseFile(json))
       toast("Loaded dive data from file");
     }
@@ -50,25 +53,22 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start"></main>
       <h1 className="text-4xl font-bold">Cressi Dive Visualiser</h1>
       {diveData &&
-        <>
-          <Accordion type="single" collapsible className="w-full max-w-3xl">
-            {diveData.ScubaDive.map(dive => {
-              const points = diveData.ScubaProfilePoint.filter(p => p.ID_ScubaDive === dive.ID);
-              const maxDepth = Math.max(...points.map(p => Number.parseFloat(p.Depth)));
-              const averageDepth = points.reduce((acc, p) => acc + Number.parseFloat(p.Depth), 0) / points.length;
-              return (<AccordionItem value={dive.ID} key={dive.ID}>
-                <AccordionTrigger>{dive.DiveStart}</AccordionTrigger>
-                <AccordionContent>
-                  Dive Time: {Math.round(Number.parseInt(dive.TotalElapsedSeconds) / 60)} minutes<br />
-                  Max Depth: {maxDepth}m<br />
-                  Average Depth: {averageDepth.toFixed(1)}m<br />
-                  <DiveGraph diveData={diveData} diveID={dive.ID} />
-                </AccordionContent>
-              </AccordionItem>)
-            })}
-          </Accordion>
-
-        </>
+        <Accordion type="single" collapsible className="w-full max-w-3xl">
+          {diveData.ScubaDive.map(dive => {
+            const points = diveData.ScubaProfilePoint.filter(p => p.ID_ScubaDive === dive.ID);
+            const maxDepth = Math.max(...points.map(p => Number.parseFloat(p.Depth)));
+            const averageDepth = points.reduce((acc, p) => acc + Number.parseFloat(p.Depth), 0) / points.length;
+            return (<AccordionItem value={dive.ID} key={dive.ID}>
+              <AccordionTrigger>{dive.ID}. {dive.DiveStart} - {(parseInt(dive.TotalElapsedSeconds) / 60).toFixed(0)} mins</AccordionTrigger>
+              <AccordionContent>
+                Dive Time: {Math.round(Number.parseInt(dive.TotalElapsedSeconds) / 60)} minutes<br />
+                Max Depth: {maxDepth}m<br />
+                Average Depth: {averageDepth.toFixed(1)}m<br />
+                <DiveGraph diveData={diveData} diveID={dive.ID} />
+              </AccordionContent>
+            </AccordionItem>)
+          })}
+        </Accordion>
       }
       <div className="grid w-full max-w-sm items-center gap-1.5">
         <Label htmlFor="picture">Dives File</Label>
