@@ -49,9 +49,12 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="grid items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start"></main>
+    <div className="grid items-center justify-items-center min-h-screen gap-8 py-8">
       <h1 className="text-4xl font-bold">Cressi Dive Visualiser</h1>
+      <div className="grid w-full max-w-sm items-center gap-1.5">
+        <Label htmlFor="picture">Dives File</Label>
+        <Input type="file" accept=".json,application/json" onChange={onChange} />
+      </div>
       {diveData &&
         <Accordion type="single" collapsible className="w-full max-w-3xl">
           {diveData.ScubaDive.map(dive => {
@@ -70,10 +73,6 @@ export default function Home() {
           })}
         </Accordion>
       }
-      <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Label htmlFor="picture">Dives File</Label>
-        <Input type="file" accept=".json,application/json" onChange={onChange} />
-      </div>
     </div>
   );
 }
