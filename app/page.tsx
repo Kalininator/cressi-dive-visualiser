@@ -68,7 +68,8 @@ export default function Home() {
       {dives &&
         <Accordion type="single" collapsible className="w-full max-w-3xl">
           {dives.map(dive => {
-            // const points = diveData.ScubaProfilePoint.filter(p => p.ID_ScubaDive === dive.ID);
+            // const points = useLiveQuery(() => db.scubaProfilePoints.where('ID_ScubaDive').equals(dive.ID).toArray());
+            // const maxDepth = Math.max(...(points || []).map(p => p.Depth));
             // const maxDepth = Math.max(...points.map(p => Number.parseFloat(p.Depth)));
             // const averageDepth = points.reduce((acc, p) => acc + Number.parseFloat(p.Depth), 0) / points.length;
             return (<AccordionItem value={dive.ID.toString()} key={dive.ID}>
