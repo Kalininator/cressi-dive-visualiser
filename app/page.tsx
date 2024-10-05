@@ -4,6 +4,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import DiveGraph from "@/src/components/DiveGraph"
+import FileGuide from "@/src/components/FileGuide"
 import { db } from "@/src/db"
 import { DiveData, parseFile } from "@/src/parseFile"
 import { useLiveQuery } from "dexie-react-hooks"
@@ -59,19 +60,15 @@ export default function Home() {
   }
 
   return (
-    <div className="grid items-center justify-items-center min-h-screen gap-8 py-8">
+    <div className="grid items-center justify-items-center gap-8 py-8">
       <h1 className="text-4xl font-bold">Cressi Dive Visualiser</h1>
       <div className="grid w-full max-w-sm items-center gap-1.5">
         <Label htmlFor="picture">Dives File</Label>
         <Input type="file" accept=".json,application/json" onChange={onChange} />
       </div>
-      {dives &&
+      {(dives && dives.length) ?
         <Accordion type="single" collapsible className="w-full max-w-3xl">
           {dives.map(dive => {
-            // const points = useLiveQuery(() => db.scubaProfilePoints.where('ID_ScubaDive').equals(dive.ID).toArray());
-            // const maxDepth = Math.max(...(points || []).map(p => p.Depth));
-            // const maxDepth = Math.max(...points.map(p => Number.parseFloat(p.Depth)));
-            // const averageDepth = points.reduce((acc, p) => acc + Number.parseFloat(p.Depth), 0) / points.length;
             return (<AccordionItem value={dive.ID.toString()} key={dive.ID}>
               <AccordionTrigger>{dive.ID}. {dive.DiveStart}</AccordionTrigger>
               <AccordionContent>
@@ -79,7 +76,7 @@ export default function Home() {
               </AccordionContent>
             </AccordionItem>)
           })}
-        </Accordion>
+        </Accordion> : <FileGuide />
       }
     </div>
   );
