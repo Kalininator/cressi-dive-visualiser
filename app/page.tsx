@@ -4,11 +4,11 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import DiveGraph from "@/src/components/DiveGraph"
-import FileGuide from "@/src/components/FileGuide"
 import { db } from "@/src/db"
 import { DiveData, parseFile } from "@/src/parseFile"
 import { useLiveQuery } from "dexie-react-hooks"
 import { toast } from "sonner"
+import FileGuide from "../src/components/FileGuide"
 
 const readJsonFile = (file: Blob) =>
   new Promise((resolve, reject) => {
