@@ -35,7 +35,8 @@ const DiveGraph = ({ diveID }: { diveID: number }) => {
 		<>
 			Max Depth: {Math.max(...chartData.map(p => p.depth))}m<br />
 			Average Depth: {(chartData.reduce((acc, p) => acc + p.depth, 0) / chartData.length).toFixed(1)}m
-			<Card>
+
+			<Card className="w-full">
 				<CardContent>
 					<ChartContainer config={chartConfig}>
 						<LineChart

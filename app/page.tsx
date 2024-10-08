@@ -1,14 +1,13 @@
 'use client'
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import DiveGraph from "@/src/components/DiveGraph"
 import { db } from "@/src/db"
 import { DiveData, parseFile } from "@/src/parseFile"
 import { useLiveQuery } from "dexie-react-hooks"
 import { toast } from "sonner"
 import FileGuide from "../src/components/FileGuide"
+import Link from "next/link"
 
 const readJsonFile = (file: Blob) =>
   new Promise((resolve, reject) => {
@@ -60,23 +59,20 @@ export default function Home() {
   }
 
   return (
-    <div className="grid items-center justify-items-center gap-8 py-8">
+    <div className="grid items-center justify-items-center gap-8 py-8 max-w-xl mx-auto">
       <h1 className="text-4xl font-bold">Cressi Dive Visualiser</h1>
       <div className="grid w-full max-w-sm items-center gap-1.5">
         <Label htmlFor="picture">Dives File</Label>
         <Input type="file" accept=".json,application/json" onChange={onChange} />
       </div>
       {(dives && dives.length) ?
-        <Accordion type="single" collapsible className="w-full max-w-3xl">
-          {dives.map(dive => {
-            return (<AccordionItem value={dive.ID.toString()} key={dive.ID}>
-              <AccordionTrigger>{dive.ID}. {dive.DiveStart}</AccordionTrigger>
-              <AccordionContent>
-                <DiveGraph diveID={dive.ID} />
-              </AccordionContent>
-            </AccordionItem>)
-          })}
-        </Accordion> : <FileGuide />
+        <ul className="w-full gap-4 flex flex-col items-start">
+          {dives.toReversed().map(dive => (
+            <li key={dive.ID}>
+              <Link href={`/dive/${dive.ID}`}>Dive {dive.ProgressiveNumber} - {dive.DiveStart}</Link>
+            </li>
+          ))}
+        </ul> : <FileGuide />
       }
     </div>
   );
